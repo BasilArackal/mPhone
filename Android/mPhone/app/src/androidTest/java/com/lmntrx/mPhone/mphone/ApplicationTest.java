@@ -1,4 +1,4 @@
-package com.lmntrx.acjlionsroar.mphone;
+package com.lmntrx.mPhone.mphone;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

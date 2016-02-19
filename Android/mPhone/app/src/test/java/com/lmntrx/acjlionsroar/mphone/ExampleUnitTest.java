@@ -1,4 +1,4 @@
-package com.lmntrx.acjlionsroar.mphone;
+package com.lmntrx.mPhone.mphone;
 
 import org.junit.Test;
 

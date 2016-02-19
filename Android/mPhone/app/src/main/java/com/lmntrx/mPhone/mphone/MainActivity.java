@@ -1,4 +1,4 @@
-package com.lmntrx.acjlionsroar.mphone;
+package com.lmntrx.mPhone.mphone;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
