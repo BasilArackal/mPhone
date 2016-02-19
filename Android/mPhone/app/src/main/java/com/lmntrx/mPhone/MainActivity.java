@@ -1,4 +1,4 @@
-package com.lmntrx.mPhone.mphone;
+package com.lmntrx.mPhone;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
