@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/mainLayout"
     android:visibility="visible"
+    android:background="@color/colorMainBackground"
     tools:context="com.lmntrx.mphone.MainActivity">
 
 
@@ -12,21 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/comingSoonLayout"
-        android:background="@drawable/coming_soon_land"
-        android:visibility="invisible"
-        >
+        android:background="@drawable/comingsoonpatched"
+        android:visibility="invisible" >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="29th Feb 2016"
             android:id="@+id/Date"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorLaunchDate"
             android:alpha="1"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+             />
 
     </RelativeLayout>
 

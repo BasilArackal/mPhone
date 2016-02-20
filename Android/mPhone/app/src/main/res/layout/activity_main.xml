@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/mainLayout"
     android:visibility="visible"
+    android:background="@color/colorMainBackground"
     tools:context="com.lmntrx.mphone.MainActivity">
 
 
@@ -12,8 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/comingSoonLayout"
-        android:background="@drawable/coming_soon"
+        android:background="@drawable/comingsoonpatched"
         android:visibility="invisible"
+
         >
         <TextView
             android:layout_width="wrap_content"
@@ -26,7 +28,7 @@
             android:alpha="1"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="52dp" />
+            />
     </RelativeLayout>
 
     <RelativeLayout
