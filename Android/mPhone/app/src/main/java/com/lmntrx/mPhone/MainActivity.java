@@ -3,7 +3,6 @@ package com.lmntrx.mPhone;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -17,6 +16,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    static boolean isFinishing=true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
         final TextView launchDate = (TextView) findViewById(R.id.Date);
         final Animation fadeIn;
         final Animation fadeOut;
-        launchDate.animate().alpha(1f).setDuration(3000);
         fadeOut = new AlphaAnimation(1.0f, 0.05f);
         fadeIn = new AlphaAnimation(0.05f, 1.0f);
+        launchDate.animate().alpha(1f).setDuration(3000);
         fadeIn.setDuration(500);
         fadeIn.setStartOffset(0);
 
@@ -86,24 +87,29 @@ public class MainActivity extends AppCompatActivity {
         final ImageView text = (ImageView) findViewById(R.id.mPhoneText);
         final RelativeLayout comingSoonLayout = (RelativeLayout) findViewById(R.id.comingSoonLayout);
         final RelativeLayout launcherLayout = (RelativeLayout) findViewById(R.id.launcherLayout);
-        lMango.setTranslationX(-2000f);
-        rMango.setTranslationX(2000f);
-        lMango.animate().translationXBy(2000f).setDuration(1000);
-        rMango.animate().translationXBy(-2000f).setDuration(2000);
-        new CountDownTimer(5000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                if (millisUntilFinished <= 3000) {
-                    text.animate().alpha(1f).setDuration(1000);
+        if (isFinishing){
+            lMango.setTranslationX(-2000f);
+            rMango.setTranslationX(2000f);
+            lMango.animate().translationXBy(2000f).setDuration(1000);
+            rMango.animate().translationXBy(-2000f).setDuration(2000);
+            new CountDownTimer(5000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (millisUntilFinished <= 3000) {
+                        text.animate().alpha(1f).setDuration(1000);
+                    }
                 }
-            }
 
-            @Override
-            public void onFinish() {
-                comingSoonLayout.setVisibility(View.VISIBLE);
-                launcherLayout.setVisibility(View.INVISIBLE);
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    comingSoonLayout.setVisibility(View.VISIBLE);
+                    launcherLayout.setVisibility(View.INVISIBLE);
+                }
+            }.start();
+        }else {
+            launcherLayout.setVisibility(View.INVISIBLE);
+            comingSoonLayout.setVisibility(View.VISIBLE);
+        }
 
         String launchDateAndTimeS = "2016-02-29 07:00:00";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -133,6 +139,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (!isFinishing()){
+           isFinishing=false;
+        }
+
+        super.onDestroy();
     }
 }
 
