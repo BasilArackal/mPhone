@@ -1,5 +1,6 @@
 package com.lmntrx.mPhone;
 
+import android.content.pm.ActivityInfo;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         final RelativeLayout comingSoonLayout = (RelativeLayout) findViewById(R.id.comingSoonLayout);
         final RelativeLayout launcherLayout = (RelativeLayout) findViewById(R.id.launcherLayout);
         if (isFinishing){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
             lMango.setTranslationX(-2000f);
             rMango.setTranslationX(2000f);
             lMango.animate().translationXBy(2000f).setDuration(1000);
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFinish() {
                     comingSoonLayout.setVisibility(View.VISIBLE);
                     launcherLayout.setVisibility(View.INVISIBLE);
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 }
             }.start();
         }else {
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
 
+        //if orientation is changed then isFinishing() returns true
         if (!isFinishing()){
            isFinishing=false;
         }
