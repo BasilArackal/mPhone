@@ -1,4 +1,4 @@
-package com.lmntrx.mPhone;
+package com.lmntrx.android.mPhone;
 
 import android.content.pm.ActivityInfo;
 import android.os.CountDownTimer;

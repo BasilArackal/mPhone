@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.lmntrx.mphone"
+        applicationId "com.lmntrx.android.mphone"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 4

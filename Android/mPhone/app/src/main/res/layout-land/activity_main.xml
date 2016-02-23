@@ -6,7 +6,7 @@
     android:id="@+id/mainLayout"
     android:visibility="visible"
     android:background="@color/colorMainBackground"
-    tools:context="com.lmntrx.mphone.MainActivity">
+    tools:context="com.lmntrx.android.mphone.MainActivity">
 
 
     <RelativeLayout
