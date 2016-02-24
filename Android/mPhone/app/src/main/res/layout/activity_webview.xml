@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lmntrx.android.mPhone.WebViewActivity">
+    tools:context="com.lmntrx.android.mPhone.WebViewActivity"
+    android:id="@+id/webViewLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -37,14 +38,50 @@
         android:id="@+id/webView"
         android:layout_below="@+id/progressBar" />
 
-    <!--replace this text view with launcher-->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/loadingTXT"
-        android:text="Loading"/>
+    <!--Splash Screen launcher-->
 
 
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/themeColorYellow"
+        android:id="@+id/splashLayout">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lmango"
+            android:id="@+id/lmango"
+            android:layout_marginLeft="83dp"
+            android:layout_marginStart="83dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/mPhoneText"
+            android:layout_alignStart="@+id/mPhoneText"
+            android:layout_marginTop="105dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rmango"
+            android:id="@+id/rmango"
+            android:layout_above="@+id/mPhoneText"
+            android:layout_alignLeft="@+id/lmango"
+            android:layout_alignStart="@+id/lmango"
+            android:layout_marginLeft="53dp"
+            android:layout_marginStart="53dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mphone"
+            android:id="@+id/mPhoneText"
+            android:alpha="0"
+            android:layout_marginTop="55dp"
+            android:layout_below="@+id/lmango"
+            android:layout_centerHorizontal="true" />
+
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
+

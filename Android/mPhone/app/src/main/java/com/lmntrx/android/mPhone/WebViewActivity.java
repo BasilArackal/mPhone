@@ -6,10 +6,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.http.SslError;
+import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -18,9 +21,16 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 public class WebViewActivity extends AppCompatActivity {
+
+
+
+
+
 
     WebView webview;
 
@@ -32,7 +42,47 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_webview);
+        getSupportActionBar().hide();
+
+
+        //Animation code
+        ImageView mangoLeft=(ImageView)findViewById(R.id.lmango);
+        ImageView mangoRight=(ImageView)findViewById(R.id.rmango);
+        final ImageView mangoText=(ImageView)findViewById(R.id.mPhoneText);
+        mangoLeft.setTranslationX(-2000);
+        mangoRight.setTranslationX(2000);
+        mangoLeft.animate().translationXBy(2000).setDuration(1500);
+        mangoRight.animate().translationXBy(-2000).setDuration(2500);
+        CountDownTimer animationCounter=new CountDownTimer(3000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                mangoText.animate().alpha(1f).setDuration(600);
+            }
+        }.start();
+        //---------------------------------------------
+        // SHOWS SPLASH SCREEN AND HIDES IT AFTER GIVEN TIME
+        final RelativeLayout splashLayout=(RelativeLayout) findViewById(R.id.splashLayout);
+
+        splashLayout.setVisibility(View.VISIBLE);
+        splashLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSupportActionBar().show();
+                splashLayout.setVisibility(View.GONE);
+            }
+
+
+        }, 6000); // CHANGE THIS VALUE TO ADJUST SPLASH SCREEN DURATION
+
+
+        //---------------------------------------------
 
         webview = (WebView) findViewById(R.id.webView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -109,7 +159,7 @@ public class WebViewActivity extends AppCompatActivity {
                 view.loadUrl(url);
             else {
                 findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
-                findViewById(R.id.loadingTXT).setVisibility(View.INVISIBLE);
+               // findViewById(R.id.loadingTXT).setVisibility(View.INVISIBLE);
                 findViewById(R.id.webView).setVisibility(View.GONE);
             }
             progressBar.setVisibility(View.VISIBLE);
@@ -122,7 +172,7 @@ public class WebViewActivity extends AppCompatActivity {
         public void onPageFinished(WebView view, String url) {
             System.out.println("on finish");
             webview.setVisibility(View.VISIBLE);
-            findViewById(R.id.loadingTXT).setVisibility(View.GONE);
+            //findViewById(R.id.loadingTXT).setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
         }
 
