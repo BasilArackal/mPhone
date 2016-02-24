@@ -38,7 +38,7 @@
         android:id="@+id/webView"
         android:layout_below="@+id/progressBar" />
 
-    <!--replace this text view with launcher-->
+    <!--Splash Screen launcher-->
 
 
     <RelativeLayout

@@ -42,7 +42,10 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_webview);
+        getSupportActionBar().hide();
+
 
         //Animation code
         ImageView mangoLeft=(ImageView)findViewById(R.id.lmango);
@@ -71,6 +74,7 @@ public class WebViewActivity extends AppCompatActivity {
         splashLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
+                getSupportActionBar().show();
                 splashLayout.setVisibility(View.GONE);
             }
 
