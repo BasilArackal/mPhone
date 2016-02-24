@@ -26,7 +26,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-    private final String url="http://brittosaji19.github.io/";  //Replace with "http://shop.mphone.in/" later
+    private final String url = "http://brittosaji19.github.io/", domain = "brittosaji19-github-io";  //Replace with "http://shop.mphone.in/" later
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -93,8 +93,8 @@ public class WebViewActivity extends AppCompatActivity {
         public MyWebViewClient(Activity activity) {
             this.urlCache = new UrlCache(activity);
 
-            this.urlCache.register("http://shop.mphone.in/", "shop-mphone-in.html",
-                    "text/html", "UTF-8", 5 * UrlCache.ONE_MINUTE);
+            this.urlCache.register(url, domain + ".html",
+                    "text/html", "UTF-8", UrlCache.ONE_MINUTE);
 
         }
 
@@ -135,7 +135,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 
-            if (!view.getUrl().equals("http://shop.mphone.in/")) {
+            if (!view.getUrl().equals(url)) {
                 findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
                 findViewById(R.id.webView).setVisibility(View.GONE);
             }
@@ -146,7 +146,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
 
-            if (!view.getUrl().equals("http://shop.mphone.in/")) {
+            if (!view.getUrl().equals(url)) {
                 findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
                 findViewById(R.id.webView).setVisibility(View.GONE);
             }
@@ -157,7 +157,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
-            if (!view.getUrl().equals("http://shop.mphone.in/")) {
+            if (!view.getUrl().equals(url)) {
                 findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
                 findViewById(R.id.webView).setVisibility(View.GONE);
             }
