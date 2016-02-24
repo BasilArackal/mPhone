@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lmntrx.android.mPhone.WebViewActivity">
+    tools:context="com.lmntrx.android.mPhone.WebViewActivity"
+    android:id="@+id/webViewLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,13 +39,34 @@
         android:layout_below="@+id/progressBar" />
 
     <!--replace this text view with launcher-->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/loadingTXT"
-        android:text="Loading"/>
 
 
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/themeColorYellow"
+        android:id="@+id/splashLayout">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lmango"
+            android:id="@+id/lmango"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rmango"
+            android:id="@+id/rmango"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mphone"
+            android:id="@+id/mPhoneText"/>
+
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
+
