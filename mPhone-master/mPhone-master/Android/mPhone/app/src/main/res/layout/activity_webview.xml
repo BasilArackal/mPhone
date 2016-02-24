@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lmntrx.android.mPhone.WebViewActivity"
+    android:id="@+id/webViewLayout">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/error_msg_layout"
+        android:visibility="gone">
+        <!--replace this text view with some drawable later-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Cannot Connect at the moment, try again later"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_marginBottom="-8dp"
+        android:layout_marginTop="-8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/progressBar"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:id="@+id/webView"
+        android:layout_below="@+id/progressBar" />
+
+    <!--replace this text view with launcher-->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/themeColorYellow"
+        android:id="@+id/splashLayout">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lmango"
+            android:id="@+id/lmango"
+            android:layout_marginBottom="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/mPhoneText"
+            android:layout_alignStart="@+id/mPhoneText"
+            android:layout_marginLeft="72dp"
+            android:layout_marginStart="72dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rmango"
+            android:id="@+id/rmango"
+            android:layout_marginLeft="58dp"
+            android:layout_marginStart="58dp"
+            android:layout_below="@+id/mPhoneText"
+            android:layout_alignLeft="@+id/lmango"
+            android:layout_alignStart="@+id/lmango" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mphone"
+            android:id="@+id/mPhoneText"
+            android:alpha="0"
+            android:layout_above="@+id/lmango"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="43dp" />
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
