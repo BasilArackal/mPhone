@@ -50,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/lmango"
+<<<<<<< HEAD
             android:id="@+id/lmango"
             android:layout_marginBottom="150dp"
             android:layout_alignParentBottom="true"
@@ -57,27 +58,38 @@
             android:layout_alignStart="@+id/mPhoneText"
             android:layout_marginLeft="72dp"
             android:layout_marginStart="72dp" />
+=======
+            android:id="@+id/lmango"/>
+>>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rmango"
+<<<<<<< HEAD
             android:id="@+id/rmango"
             android:layout_marginLeft="58dp"
             android:layout_marginStart="58dp"
             android:layout_below="@+id/mPhoneText"
             android:layout_alignLeft="@+id/lmango"
             android:layout_alignStart="@+id/lmango" />
+=======
+            android:id="@+id/rmango"/>
+>>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/mphone"
+<<<<<<< HEAD
             android:id="@+id/mPhoneText"
             android:alpha="0"
             android:layout_above="@+id/lmango"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="43dp" />
+=======
+            android:id="@+id/mPhoneText"/>
+>>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
 
 
 
