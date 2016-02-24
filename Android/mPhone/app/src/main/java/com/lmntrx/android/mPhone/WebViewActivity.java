@@ -21,10 +21,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-<<<<<<< HEAD
 import android.widget.ImageView;
-=======
->>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -35,11 +32,6 @@ public class WebViewActivity extends AppCompatActivity {
 
 
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
     WebView webview;
 
     ProgressBar progressBar;
@@ -52,7 +44,6 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-<<<<<<< HEAD
         //Animation code
         ImageView mangoLeft=(ImageView)findViewById(R.id.lmango);
         ImageView mangoRight=(ImageView)findViewById(R.id.rmango);
@@ -72,8 +63,6 @@ public class WebViewActivity extends AppCompatActivity {
                 mangoText.animate().alpha(1f).setDuration(600);
             }
         }.start();
-=======
->>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
         //---------------------------------------------
         // SHOWS SPLASH SCREEN AND HIDES IT AFTER GIVEN TIME
         final RelativeLayout splashLayout=(RelativeLayout) findViewById(R.id.splashLayout);
@@ -86,11 +75,7 @@ public class WebViewActivity extends AppCompatActivity {
             }
 
 
-<<<<<<< HEAD
         }, 6000); // CHANGE THIS VALUE TO ADJUST SPLASH SCREEN DURATION
-=======
-        }, 3000); // CHANGE THIS VALUE TO ADJUST SPLASH SCREEN DURATION
->>>>>>> 66db38b2172aeb76d42816f959e244a9b5eb4d2f
 
 
         //---------------------------------------------

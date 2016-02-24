@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#FFC107</color>
-    <color name="colorPrimaryDark">#FFA000</color>
-    <color name="colorAccent">#FFEB3B</color>
-    <color name="colorLaunchDate">#00A99B</color>
-    <color name="colorMainBackground">#e0e0e0</color>
-    <color name="themeColorYellow">#ffc20e</color>
-</resources>
