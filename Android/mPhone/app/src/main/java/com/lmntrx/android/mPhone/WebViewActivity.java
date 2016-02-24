@@ -26,6 +26,8 @@ public class WebViewActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    private final String url="http://brittosaji19.github.io/";  //Replace with "http://shop.mphone.in/" later
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         webview.setWebViewClient(new MyWebViewClient(this));
 
-        webview.loadUrl("http://shop.mphone.in/");
+        webview.loadUrl(url);
     }
 
     @Override
