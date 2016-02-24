@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFinish() {
                     comingSoonLayout.setVisibility(View.VISIBLE);
                     launcherLayout.setVisibility(View.INVISIBLE);
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 }
             }.start();
         }else {
