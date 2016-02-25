@@ -2,4 +2,8 @@
     <string name="app_name">mPhone</string>
     <string name="launch_date">29th Feb 2016</string>
     <string name="powered_lmntrx_txt">Powered by LmntrX</string>
+    <string name="menu_item_refresh">Refresh</string>
+    <string name="home_menu_item">Home</string>
+    <string name="info_menu_item">About</string>
+    <string name="close_app_menu_item">Close App</string>
 </resources>

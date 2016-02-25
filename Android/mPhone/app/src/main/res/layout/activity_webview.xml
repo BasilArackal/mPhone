@@ -1,94 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/webViewLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lmntrx.android.mPhone.WebViewActivity"
-    android:id="@+id/webViewLayout">
+    tools:context="com.lmntrx.android.mPhone.WebViewActivity">
 
     <RelativeLayout
+        android:id="@+id/error_msg_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/error_msg_layout"
         android:visibility="gone">
         <!--replace this text view with some drawable later-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Cannot Connect at the moment, try again later"/>
+            android:text="Cannot Connect at the moment, try again later" />
     </RelativeLayout>
 
     <ProgressBar
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_marginBottom="-8dp"
-        android:layout_marginTop="-8dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="-8dp"
+        android:layout_marginTop="-8dp" />
+
+    <me.itangqi.waveloadingview.WaveLoadingView
+        android:id="@+id/waveLoadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:wlv_borderColor="@color/colorPrimaryDark"
+        app:wlv_borderWidth="3dp"
+        app:wlv_shapeType="circle"
+        app:wlv_titleCenter="ഇപ്പൊ ശെരിയാക്കി തരാം"
+        app:wlv_titleCenterColor="@color/colorSlateGray"
+        app:wlv_titleCenterSize="24sp"
+        app:wlv_waveAmplitude="50"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:wlv_waveColor="@color/colorPrimary"/>
 
     <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/progressBar"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:id="@+id/webView"
-        android:layout_below="@+id/progressBar" />
+        android:layout_below="@+id/progressBar"
+        android:visibility="gone" />
+
 
     <!--Splash Screen launcher-->
-
-
     <RelativeLayout
-        android:layout_width="match_parent" android:layout_height="match_parent"
-        android:background="@color/themeColorYellow"
-        android:id="@+id/splashLayout">
+        android:id="@+id/splashLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/themeColorYellow">
 
         <ImageView
+            android:id="@+id/lmango"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/lmango"
-            android:id="@+id/lmango"
+            android:layout_alignLeft="@+id/mPhoneText"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/mPhoneText"
             android:layout_marginLeft="83dp"
             android:layout_marginStart="83dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignLeft="@+id/mPhoneText"
-            android:layout_alignStart="@+id/mPhoneText"
-            android:layout_marginTop="105dp" />
+            android:layout_marginTop="105dp"
+            android:background="@drawable/lmango" />
 
         <ImageView
+            android:id="@+id/rmango"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rmango"
-            android:id="@+id/rmango"
             android:layout_above="@+id/mPhoneText"
             android:layout_alignLeft="@+id/lmango"
             android:layout_alignStart="@+id/lmango"
             android:layout_marginLeft="53dp"
-            android:layout_marginStart="53dp" />
+            android:layout_marginStart="53dp"
+            android:background="@drawable/rmango" />
 
         <ImageView
+            android:id="@+id/mPhoneText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/mphone"
-            android:id="@+id/mPhoneText"
-            android:alpha="0"
-            android:layout_marginTop="55dp"
             android:layout_below="@+id/lmango"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="55dp"
+            android:alpha="0"
+            android:background="@drawable/mphone" />
 
         <TextView
+            android:id="@+id/lmntrxTxt"
+            style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/lmntrxTxt"
-            style="@style/TextAppearance.AppCompat.Headline"
             android:layout_alignParentBottom="true"
-            android:textColor="#ffffff"
-            android:gravity="center"
             android:alpha="0"
-            android:text="@string/powered_lmntrx_txt"/>
+            android:gravity="center"
+            android:text="@string/powered_lmntrx_txt"
+            android:textColor="#ffffff" />
 
 
     </RelativeLayout>

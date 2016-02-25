@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_goHome"
+        android:icon="@drawable/home"
+        app:showAsAction="ifRoom"
+        android:onClick="goHome"
+        android:title="@string/home_menu_item"
+        />
+
+    <item
+        android:id="@+id/action_info"
+        android:icon="@drawable/info"
+        app:showAsAction="ifRoom"
+        android:onClick="showInfo"
+        android:title="@string/info_menu_item"
+        />
+
+    <item
+        android:id="@+id/action_close"
+        android:icon="@drawable/close"
+        app:showAsAction="ifRoom"
+        android:onClick="closeApp"
+        android:title="@string/close_app_menu_item"
+        />
+
+</menu>

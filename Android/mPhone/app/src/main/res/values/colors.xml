@@ -6,4 +6,5 @@
     <color name="colorLaunchDate">#00A99B</color>
     <color name="colorMainBackground">#e0e0e0</color>
     <color name="themeColorYellow">#ffc20e</color>
+    <color name="colorSlateGray">#2F4F4F</color>
 </resources>
