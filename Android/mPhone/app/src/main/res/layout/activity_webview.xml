@@ -79,6 +79,16 @@
             android:layout_below="@+id/lmango"
             android:layout_centerHorizontal="true" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lmntrxTxt"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_alignParentBottom="true"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:alpha="0"
+            android:text="@string/powered_lmntrx_txt"/>
 
 
     </RelativeLayout>
