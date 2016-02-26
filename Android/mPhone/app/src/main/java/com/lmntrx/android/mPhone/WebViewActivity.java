@@ -50,7 +50,13 @@ public class WebViewActivity extends AppCompatActivity {
 
     public final String LOG_TAG = "mPhoneStore";
 
-    private final String url = "http://shop.mphone.in/", domain = "shop-mphone-in";
+
+    private final String timerPage="file:///android_asset/timer/timer.html";
+
+    private final String url = timerPage, domain = "shop-mphone-in"; /*"http://shop.mphone.in/"*/
+
+    private final String aboutPage="file:///android_asset/about/about.html";
+
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -201,6 +207,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     public void showInfo(MenuItem item) {
         //TODO Start About Activity or load about page in WebView itself
+        webview.loadUrl(aboutPage);
     }
 
     public void closeApp(MenuItem item) {
@@ -215,7 +222,7 @@ public class WebViewActivity extends AppCompatActivity {
             //Caching site
             urlCache = new UrlCache(activity);
             urlCache.register(url, domain + ".html",
-                    "text/html", "UTF-8", UrlCache.ONE_MINUTE);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+                    "text/html", "UTF-8", 6*UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
 
         }
 
