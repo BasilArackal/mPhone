@@ -12,11 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-        <!--replace this text view with some drawable later-->
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Cannot Connect at the moment, try again later" />
+            android:src="@drawable/error_in_connection"/>
     </RelativeLayout>
 
     <ProgressBar

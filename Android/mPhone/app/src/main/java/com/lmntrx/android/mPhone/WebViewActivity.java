@@ -3,11 +3,14 @@ package com.lmntrx.android.mPhone;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
+import android.net.MailTo;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.CountDownTimer;
 import android.support.design.widget.Snackbar;
@@ -31,6 +34,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 /**
@@ -51,11 +59,15 @@ public class WebViewActivity extends AppCompatActivity {
     public final String LOG_TAG = "mPhoneStore";
 
 
-    private final String timerPage="file:///android_asset/timer/timer.html";
+    private final String timerPage = "file:///android_asset/timer/timer.html";
 
-    private final String url = timerPage, domain = "shop-mphone-in"; /*"http://shop.mphone.in/"*/
+    private final String mPhoneStoreUrl = "http://shop.mphone.in/";
 
-    private final String aboutPage="file:///android_asset/about/about.html";
+    String url = null, domain = null;
+
+    private final String aboutPage = "file:///android_asset/about/about.html";
+
+    static Boolean isTimer = false;
 
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -65,6 +77,10 @@ public class WebViewActivity extends AppCompatActivity {
 
         //Setting Layout
         setContentView(R.layout.activity_webview);
+
+        //Locking Orientation to portrait
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         try {
             //Hiding ActionBar
             getSupportActionBar().hide();
@@ -72,6 +88,34 @@ public class WebViewActivity extends AppCompatActivity {
             Log.e(LOG_TAG, e.getMessage() + " ");
         }
 
+        //Deciding which page url to load
+        String launchDateAndTimeS = "2016-02-26 09:46:00";
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date launchDateAndTime = dateFormat.parse(launchDateAndTimeS);
+
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            long launchTime = launchDateAndTime.getTime();
+
+            if (currentTime >= launchTime) {
+                //Decided to load shop.mphone.in
+                url = mPhoneStoreUrl;
+                domain = "shop-mphone-in";
+                isTimer = false;
+                Log.d(LOG_TAG, "Launched");
+            } else {
+                //Decided to load timer
+                url = timerPage;
+                domain = "timer";
+                isTimer = true;
+                Log.d(LOG_TAG, "Not Yet Launched");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //Initialising loader
         waveLoadingView = (WaveLoadingView) findViewById(R.id.waveLoadingView);
 
         //To stop orientation change during splash screen
@@ -126,15 +170,16 @@ public class WebViewActivity extends AppCompatActivity {
         //setting webViewClient for webView. If not set some webView features won't work
         webview.setWebViewClient(new MyWebViewClient(this));
 
-        //loading url
-        if (isNetworkAvailable()) {
-            webview.loadUrl(url);
-            waveLoadingView.setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
-            webview.setVisibility(View.GONE);
-
-        }
+        //loading url. if timer is to be loaded then no need of network connectivity check
+        if (!isTimer)
+            if (isNetworkAvailable()) {
+                webview.loadUrl(url);
+                waveLoadingView.setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
+                webview.setVisibility(View.GONE);
+            }
+        else webview.loadUrl(url);
         //Animation code
         mangoLeft.setTranslationX(-2000);
         mangoRight.setTranslationX(2000);
@@ -198,15 +243,30 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        webview.clearCache(false);
+        try {
+            webview.clearCache(false);
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, e.getMessage() + "WebView wasn't initialized");
+        }
     }
 
     public void goHome(MenuItem item) {
-        webview.loadUrl(url);
+
+        try {
+            if (!webview.getUrl().equals(url))
+                webview.loadUrl(url);
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "WebView wasn't initialized due to error in connection");
+            if (isNetworkAvailable()) {
+                findViewById(R.id.error_msg_layout).setVisibility(View.GONE);
+                webview.loadUrl(url);
+                waveLoadingView.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     public void showInfo(MenuItem item) {
-        //TODO Start About Activity or load about page in WebView itself
         webview.loadUrl(aboutPage);
     }
 
@@ -222,34 +282,63 @@ public class WebViewActivity extends AppCompatActivity {
             //Caching site
             urlCache = new UrlCache(activity);
             urlCache.register(url, domain + ".html",
-                    "text/html", "UTF-8", 6*UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+                    "text/html", "UTF-8", 6 * UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
 
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (view.getVisibility() == View.GONE) {
-                findViewById(R.id.error_msg_layout).setVisibility(View.GONE);
-                findViewById(R.id.webView).setVisibility(View.VISIBLE);
-            }
 
-            if (isNetworkAvailable()) {
+            if (url.startsWith("mailto:")) {
+                MailTo mt = MailTo.parse(url);
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{mt.getTo()});
+                i.putExtra(Intent.EXTRA_SUBJECT, mt.getSubject());
+                i.putExtra(Intent.EXTRA_CC, mt.getCc());
+                i.putExtra(Intent.EXTRA_TEXT, mt.getBody());
+                i.setType("message/rfc822");
+                WebViewActivity.this.startActivity(i);
+                view.reload();
+                return true;
+            } else if (url.startsWith("tel:")) {
+                Intent tel = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
+                WebViewActivity.this.startActivity(tel);
+                return true;
+            } else if (!url.contains("shop.mphone.in")) {
 
-                //Loads clicked link if network is available
-                view.loadUrl(url);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                WebViewActivity.this.startActivity(i);
+
+                return true;
 
             } else {
 
-                //Shows error message when network is not available
-                Snackbar.make(view, "Please check your connection", Snackbar.LENGTH_LONG).show();
+                if (view.getVisibility() == View.GONE) {
+                    findViewById(R.id.error_msg_layout).setVisibility(View.GONE);
+                    findViewById(R.id.webView).setVisibility(View.VISIBLE);
+                }
+
+                if (isNetworkAvailable()) {
+
+                    //Loads clicked link if network is available
+                    view.loadUrl(url);
+
+                } else {
+
+                    //Shows error message when network is not available
+                    Snackbar.make(view, "Please check your connection", Snackbar.LENGTH_LONG).show();
+
+                }
+
+                //Initializes progress bar to change when a link is clicked or while navigating to new page
+                progressBar.setVisibility(View.VISIBLE);
+
+
+                return true;
 
             }
-
-            //Initializes progress bar to change when a link is clicked or while navigating to new page
-            progressBar.setVisibility(View.VISIBLE);
-
-
-            return true;
         }
 
 
@@ -289,11 +378,9 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
 
-            //Server Side errors
-            if (!view.getUrl().equals(url)) {
-                findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
-                findViewById(R.id.webView).setVisibility(View.GONE);
-            }
+            //Server Side errors error_codes > 400
+            findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.webView).setVisibility(View.GONE);
 
             super.onReceivedHttpError(view, request, errorResponse);
         }
@@ -302,10 +389,8 @@ public class WebViewActivity extends AppCompatActivity {
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
             //Network Connectivity issue
-            if (!view.getUrl().equals(url)) {
-                findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
-                findViewById(R.id.webView).setVisibility(View.GONE);
-            }
+            findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.webView).setVisibility(View.GONE);
 
             super.onReceivedSslError(view, handler, error);
         }
