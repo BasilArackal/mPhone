@@ -111,7 +111,7 @@ public class WebViewActivity extends AppCompatActivity {
 
 
         //Deciding which page URL to load
-        String launchDateAndTimeS = "2016-02-29 07:00:00";
+        String launchDateAndTimeS = "2016-02-28 06:00:00";
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -137,11 +137,15 @@ public class WebViewActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+        //WebView Elements
+        webview = (ObservableWebView) findViewById(R.id.webView);
+
         //Caching site
         if (!domain.equals("timer")) {
             urlCache = new UrlCache(WebViewActivity.this);
             urlCache.register(URL, domain + ".html",
-                    "text/html", "UTF-8", 6 * UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+                    "text/html", "UTF-8", 6 * UrlCache.ONE_MINUTE);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
         }
 
 
@@ -157,8 +161,6 @@ public class WebViewActivity extends AppCompatActivity {
         final RelativeLayout splashLayout = (RelativeLayout) findViewById(R.id.splashLayout);
 
         //WebView Code
-        //WebView Elements
-        webview = (ObservableWebView) findViewById(R.id.webView);
 /**
  * Below Feature is disabled temporarily due to incompatibility with some devices
  */
@@ -262,7 +264,7 @@ public class WebViewActivity extends AppCompatActivity {
         splashLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getSupportActionBar().show();
+                //getSupportActionBar().show();
                 splashLayout.setVisibility(View.GONE);
             }
 
