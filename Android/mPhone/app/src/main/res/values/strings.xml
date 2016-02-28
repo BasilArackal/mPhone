@@ -6,4 +6,8 @@
     <string name="home_menu_item">Home</string>
     <string name="info_menu_item">About</string>
     <string name="close_app_menu_item">Close App</string>
+    <string name="mPhoneShop_URL">http://shop.mphone.in/</string>
+    <string name="mPhoneShopFileName">shop-mphone-in</string>
+    <string name="no_internet_access">No Internet Access!</string>
+    <string name="retry_btn_text">Retry</string>
 </resources>

@@ -2,7 +2,6 @@ package com.lmntrx.android.mPhone;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +24,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,8 +67,6 @@ public class WebViewActivity extends AppCompatActivity {
 
     private final String timerPage = "file:///android_asset/timer/timer.html";
 
-    private final String mPhoneStoreUrl = "http://shop.mphone.in/";
-
     String URL = null, domain = null;
 
     private final String aboutPage = "file:///android_asset/about/about.html";
@@ -77,31 +74,44 @@ public class WebViewActivity extends AppCompatActivity {
     static Boolean isTimer = false;
 
 
-
     @TargetApi(Build.VERSION_CODES.M)
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        /**
+         * Below Feature is disabled temporarily due to incompatibility with some devices
+         */
+        /*
+        //Requesting Feature
+        requestWindowFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        */
         super.onCreate(savedInstanceState);
+
 
         //Setting Layout
         setContentView(R.layout.activity_webview);
 
         //Locking Orientation to portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        try {
+/**
+ * Below Feature is disabled temporarily due to incompatibility with some devices
+ */
+        /*try {
             //Hiding ActionBar
-            getSupportActionBar().hide();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            } else {
+                Log.e(LOG_TAG, "getSupportActionBar() returned null");
+            }
         } catch (Exception e) {
-            Log.e(LOG_TAG,"getSupportActionBar() returned null");
-        }
-
-
+            Log.e(LOG_TAG, "getSupportActionBar() returned null");
+        }*/
 
 
         //Deciding which page URL to load
-        String launchDateAndTimeS = "2016-02-26 09:46:00";
+        String launchDateAndTimeS = "2016-02-29 07:00:00";
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -112,8 +122,8 @@ public class WebViewActivity extends AppCompatActivity {
 
             if (currentTime >= launchTime) {
                 //Decided to load shop.mphone.in
-                URL = mPhoneStoreUrl;
-                domain = "shop-mphone-in";
+                URL = getString(R.string.mPhoneShop_URL);
+                domain = getString(R.string.mPhoneShopFileName);
                 isTimer = false;
                 Log.d(LOG_TAG, "Launched");
             } else {
@@ -128,9 +138,11 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
         //Caching site
-        urlCache = new UrlCache(WebViewActivity.this);
-        urlCache.register(URL, domain + ".html",
-                "text/html", "UTF-8", 6 * UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+        if (!domain.equals("timer")) {
+            urlCache = new UrlCache(WebViewActivity.this);
+            urlCache.register(URL, domain + ".html",
+                    "text/html", "UTF-8", 6 * UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+        }
 
 
         //Initialising loader
@@ -147,21 +159,33 @@ public class WebViewActivity extends AppCompatActivity {
         //WebView Code
         //WebView Elements
         webview = (ObservableWebView) findViewById(R.id.webView);
-
-        //Setting Scroll Listener
+/**
+ * Below Feature is disabled temporarily due to incompatibility with some devices
+ */
+       /* //Setting Scroll Listener
         webview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 try {
                     //Hiding And Showing ActionBar onScrollChange
-                    if (scrollY>oldScrollY){
-                        WebViewActivity.this.getSupportActionBar().hide();
-                    }else WebViewActivity.this.getSupportActionBar().show();
-                }catch (Exception e){
-                    Log.e(LOG_TAG,"getSupportActionBar() returned null");
+                    if (scrollY > oldScrollY) {
+                        if (getSupportActionBar() != null) {
+                            getSupportActionBar().hide();
+                        } else {
+                            Log.e(LOG_TAG, "getSupportActionBar() returned null");
+                        }
+                    } else {
+                        if (getSupportActionBar() != null) {
+                            getSupportActionBar().show();
+                        } else {
+                            Log.e(LOG_TAG, "getSupportActionBar() returned null");
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "getSupportActionBar() returned null");
                 }
             }
-        });
+        });*/
 
         //Changing ProgressBar colour
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -207,8 +231,8 @@ public class WebViewActivity extends AppCompatActivity {
 
         //loading URL.
         if (!isTimer) {
-                webview.loadUrl(URL);
-                waveLoadingView.setVisibility(View.VISIBLE);
+            webview.loadUrl(URL);
+            waveLoadingView.setVisibility(View.VISIBLE);
         } else webview.loadUrl(URL);
 
 
@@ -267,7 +291,7 @@ public class WebViewActivity extends AppCompatActivity {
             }
             webview.goBack();
             return true;
-        }else if ((keyCode == KeyEvent.KEYCODE_BACK) && !webview.canGoBack())
+        } else if ((keyCode == KeyEvent.KEYCODE_BACK) && !webview.canGoBack())
             confirmClosing();
         return super.onKeyDown(keyCode, event);
     }
@@ -360,6 +384,18 @@ public class WebViewActivity extends AppCompatActivity {
                 return true;
 
             } else {
+                /**
+                 * Below Feature is disabled temporarily
+                 */
+                /*try {
+                    if (getSupportActionBar() != null) {
+                        getSupportActionBar().show();
+                    }else {
+                        Log.e(LOG_TAG, "getSupportActionBar() returned null");
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "getSupportActionBar() returned null");
+                }*/
 
                 if (view.getVisibility() == View.GONE) {
                     findViewById(R.id.error_msg_layout).setVisibility(View.GONE);
@@ -380,7 +416,6 @@ public class WebViewActivity extends AppCompatActivity {
                     Snackbar.make(view, "Please check your connection", Snackbar.LENGTH_LONG).show();
 
                 }
-
 
 
                 return true;
