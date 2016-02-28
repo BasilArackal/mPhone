@@ -1,8 +1,11 @@
 package com.lmntrx.android.mPhone;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -12,6 +15,7 @@ import android.net.MailTo;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,22 +59,26 @@ public class WebViewActivity extends AppCompatActivity {
 
     WaveLoadingView waveLoadingView;
 
+    public static Boolean isCached = false;
+
     private UrlCache urlCache = null;
 
-    public final String LOG_TAG = "mPhoneStore";
+    public final String LOG_TAG = "mPhoneStoreLogs";
 
 
     private final String timerPage = "file:///android_asset/timer/timer.html";
 
     private final String mPhoneStoreUrl = "http://shop.mphone.in/";
 
-    String url = null, domain = null;
+    String URL = null, domain = null;
 
     private final String aboutPage = "file:///android_asset/about/about.html";
 
     static Boolean isTimer = false;
 
 
+
+    @TargetApi(Build.VERSION_CODES.M)
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +93,14 @@ public class WebViewActivity extends AppCompatActivity {
         try {
             //Hiding ActionBar
             getSupportActionBar().hide();
-        } catch (NullPointerException e) {
-            Log.e(LOG_TAG, e.getMessage() + " ");
+        } catch (Exception e) {
+            Log.e(LOG_TAG,"getSupportActionBar() returned null");
         }
 
-        //Deciding which page url to load
+
+
+
+        //Deciding which page URL to load
         String launchDateAndTimeS = "2016-02-26 09:46:00";
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -100,13 +112,13 @@ public class WebViewActivity extends AppCompatActivity {
 
             if (currentTime >= launchTime) {
                 //Decided to load shop.mphone.in
-                url = mPhoneStoreUrl;
+                URL = mPhoneStoreUrl;
                 domain = "shop-mphone-in";
                 isTimer = false;
                 Log.d(LOG_TAG, "Launched");
             } else {
                 //Decided to load timer
-                url = timerPage;
+                URL = timerPage;
                 domain = "timer";
                 isTimer = true;
                 Log.d(LOG_TAG, "Not Yet Launched");
@@ -115,11 +127,14 @@ public class WebViewActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //Caching site
+        urlCache = new UrlCache(WebViewActivity.this);
+        urlCache.register(URL, domain + ".html",
+                "text/html", "UTF-8", 6 * UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+
+
         //Initialising loader
         waveLoadingView = (WaveLoadingView) findViewById(R.id.waveLoadingView);
-
-        //To stop orientation change during splash screen
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
 
         //Declaring View Objects
@@ -131,10 +146,28 @@ public class WebViewActivity extends AppCompatActivity {
 
         //WebView Code
         //WebView Elements
-        webview = (WebView) findViewById(R.id.webView);
+        webview = (ObservableWebView) findViewById(R.id.webView);
+
+        //Setting Scroll Listener
+        webview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                try {
+                    //Hiding And Showing ActionBar onScrollChange
+                    if (scrollY>oldScrollY){
+                        WebViewActivity.this.getSupportActionBar().hide();
+                    }else WebViewActivity.this.getSupportActionBar().show();
+                }catch (Exception e){
+                    Log.e(LOG_TAG,"getSupportActionBar() returned null");
+                }
+            }
+        });
+
+        //Changing ProgressBar colour
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-        //Only required while loading a url
+
+        //Only required while loading a URL
         progressBar.setVisibility(View.GONE);
 
         //Setting ActionBar Title
@@ -148,6 +181,9 @@ public class WebViewActivity extends AppCompatActivity {
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
 
+        //setting webViewClient for webView. If not set some webView features won't work
+        webview.setWebViewClient(new MyWebViewClient());
+
         //getting data for progress bar
         webview.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -156,6 +192,7 @@ public class WebViewActivity extends AppCompatActivity {
                 }
 
                 progressBar.setProgress(progress);
+
                 if (waveLoadingView.getVisibility() == View.VISIBLE)
                     waveLoadingView.setProgressValue(progress);
 
@@ -167,19 +204,14 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        //setting webViewClient for webView. If not set some webView features won't work
-        webview.setWebViewClient(new MyWebViewClient(this));
 
-        //loading url. if timer is to be loaded then no need of network connectivity check
-        if (!isTimer)
-            if (isNetworkAvailable()) {
-                webview.loadUrl(url);
+        //loading URL.
+        if (!isTimer) {
+                webview.loadUrl(URL);
                 waveLoadingView.setVisibility(View.VISIBLE);
-            } else {
-                findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
-                webview.setVisibility(View.GONE);
-            }
-        else webview.loadUrl(url);
+        } else webview.loadUrl(URL);
+
+
         //Animation code
         mangoLeft.setTranslationX(-2000);
         mangoRight.setTranslationX(2000);
@@ -208,7 +240,6 @@ public class WebViewActivity extends AppCompatActivity {
             public void run() {
                 getSupportActionBar().show();
                 splashLayout.setVisibility(View.GONE);
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             }
 
 
@@ -236,7 +267,8 @@ public class WebViewActivity extends AppCompatActivity {
             }
             webview.goBack();
             return true;
-        }
+        }else if ((keyCode == KeyEvent.KEYCODE_BACK) && !webview.canGoBack())
+            confirmClosing();
         return super.onKeyDown(keyCode, event);
     }
 
@@ -253,13 +285,13 @@ public class WebViewActivity extends AppCompatActivity {
     public void goHome(MenuItem item) {
 
         try {
-            if (!webview.getUrl().equals(url))
-                webview.loadUrl(url);
+            if (!webview.getUrl().equals(URL))
+                webview.loadUrl(URL);
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, "WebView wasn't initialized due to error in connection");
             if (isNetworkAvailable()) {
                 findViewById(R.id.error_msg_layout).setVisibility(View.GONE);
-                webview.loadUrl(url);
+                webview.loadUrl(URL);
                 waveLoadingView.setVisibility(View.VISIBLE);
             }
         }
@@ -271,18 +303,32 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     public void closeApp(MenuItem item) {
-        WebViewActivity.this.finish();
+        confirmClosing();
+    }
+
+    private void confirmClosing() {
+        new AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        WebViewActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     class MyWebViewClient extends WebViewClient {
 
 
-        public MyWebViewClient(Activity activity) {
-
-            //Caching site
-            urlCache = new UrlCache(activity);
-            urlCache.register(url, domain + ".html",
-                    "text/html", "UTF-8", 6 * UrlCache.ONE_HOUR);  //TODO Change ONE_MINUTE to 6*ONE_HOUR later
+        public MyWebViewClient() {
 
         }
 
@@ -305,7 +351,7 @@ public class WebViewActivity extends AppCompatActivity {
                 Intent tel = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
                 WebViewActivity.this.startActivity(tel);
                 return true;
-            } else if (!url.contains("shop.mphone.in")) {
+            } else if (!url.contains("http://shop.mphone.in")) {
 
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
@@ -325,6 +371,9 @@ public class WebViewActivity extends AppCompatActivity {
                     //Loads clicked link if network is available
                     view.loadUrl(url);
 
+                    //Initializes progress bar to change when a link is clicked or while navigating to new page
+                    progressBar.setVisibility(View.VISIBLE);
+
                 } else {
 
                     //Shows error message when network is not available
@@ -332,15 +381,12 @@ public class WebViewActivity extends AppCompatActivity {
 
                 }
 
-                //Initializes progress bar to change when a link is clicked or while navigating to new page
-                progressBar.setVisibility(View.VISIBLE);
 
 
                 return true;
 
             }
         }
-
 
         @Override
         public void onPageFinished(WebView view, String url) {
@@ -349,7 +395,17 @@ public class WebViewActivity extends AppCompatActivity {
             System.out.println("on finish");
 
             //Showing webView   NB: WebView is hidden only on first load
-            webview.setVisibility(View.VISIBLE);
+            if (isCached || url.equals(aboutPage) || url.equals(timerPage)) {
+                webview.setVisibility(View.VISIBLE);
+
+                //Hiding Error page
+                findViewById(R.id.error_msg_layout).setVisibility(View.GONE);
+            } else {
+
+                webview.setVisibility(View.GONE);
+                //Hiding Error page
+                findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
+            }
 
             //Hiding progressBar
             progressBar.setVisibility(View.GONE);
@@ -367,7 +423,7 @@ public class WebViewActivity extends AppCompatActivity {
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 
             //Some Unknown error
-            if (!view.getUrl().equals(url)) {
+            if (!view.getUrl().equals(URL)) {
                 findViewById(R.id.error_msg_layout).setVisibility(View.VISIBLE);
                 findViewById(R.id.webView).setVisibility(View.GONE);
             }

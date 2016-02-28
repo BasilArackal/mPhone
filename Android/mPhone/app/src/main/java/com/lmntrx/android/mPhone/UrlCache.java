@@ -85,6 +85,8 @@ public class UrlCache {
             if(cacheEntryAge > cacheEntry.maxAgeMillis){
                 cachedFile.delete();
 
+                WebViewActivity.isCached=false;
+
                 //cached file deleted, call load() again.
                 Log.d("Log", "Deleting from cache: " + url);
                 return load(url);
@@ -92,6 +94,7 @@ public class UrlCache {
 
             //cached file exists and is not too old. Return file.
             Log.d("Log", "Loading from cache: " + url);
+            WebViewActivity.isCached=true;
             try {
                 return new WebResourceResponse(
                         cacheEntry.mimeType, cacheEntry.encoding, new FileInputStream(cachedFile));
@@ -103,11 +106,13 @@ public class UrlCache {
         } else {
             try{
                 downloadAndStore(url, cacheEntry, cachedFile);
+                WebViewActivity.isCached=true;
 
                 //now the file exists in the cache, so we can just call this method again to read it.
                 return load(url);
             } catch(Exception e){
                 Log.d("Log", "Error reading file over network: " + cachedFile.getPath(), e);
+                WebViewActivity.isCached=false;
             }
         }
 

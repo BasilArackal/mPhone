@@ -44,7 +44,7 @@
         android:visibility="gone"
         app:wlv_waveColor="@color/colorPrimary"/>
 
-    <WebView
+    <com.lmntrx.android.mPhone.ObservableWebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
